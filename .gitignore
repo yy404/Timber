@@ -1,1 +1,9 @@
+# Xcode Files
 *.plist
+
+# Visual Studio Files
+.vs/
+Debug/
+*.sln
+*.vcxproj
+*.vcxproj.*

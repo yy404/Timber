@@ -1,9 +1,13 @@
  #include "GameUI.hpp"
 
+#ifndef RESOURCE_PATH_HPP
+#define resourcePath() ""
+#endif
+
 GameUI::GameUI(): fontSizeDefault(75)
 {
     // create template text
-    font.loadFromFile(resourcePath() + "fonts/KOMIKAP_.ttf");
+    font.loadFromFile(resourcePath() + std::string("fonts/KOMIKAP_.ttf"));
     sf::Text templateText;
     templateText.setFont(font); // must set font to show the text
     templateText.setCharacterSize(fontSizeDefault);

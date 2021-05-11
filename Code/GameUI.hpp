@@ -2,7 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+
+#ifdef RESOURCE_PATH_MM 
 #include "ResourcePath.hpp"
+#endif
 
 class GameUI
 {
