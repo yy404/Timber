@@ -1,5 +1,7 @@
 # Xcode Files
 *.plist
+ResourcePath.hpp
+ResourcePath.mm
 
 # Visual Studio Files
 .vs/

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#ifdef RESOURCE_PATH_MM 
+#ifdef XCODE_VERSION
 #include "ResourcePath.hpp"
 #endif
 
