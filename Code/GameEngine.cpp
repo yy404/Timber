@@ -1,13 +1,12 @@
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine()
+GameEngine::GameEngine(): 
+    windowWidth(1920.0f), windowHeight(1080.0f), 
+    gameUI(windowWidth, windowHeight), 
+    tree(windowWidth), background("graphics/background.png")
 {
-    // Get the screen resolution
-    float width = sf::VideoMode::getDesktopMode().width;
-    float height = sf::VideoMode::getDesktopMode().height;
-    
-    // Create the main window
-    window.create(sf::VideoMode(width,height), "Timberman Game", sf::Style::Fullscreen);
+    // Create a game window
+    window.create(sf::VideoMode(windowWidth, windowHeight), "Game Window");
 }
 
 void GameEngine::run()
@@ -23,9 +22,9 @@ void GameEngine::run()
 
 void GameEngine::input()
 {
-    // handle event input
+    // Handle event input
     sf::Event event;
-    while (window.pollEvent(event)) // must poll event to show the window
+    while (window.pollEvent(event)) // Must poll event to show the window
     {
         // Close window: exit
         if (event.type == sf::Event::Closed) {
@@ -47,15 +46,15 @@ void GameEngine::input()
         }
     }
     
-    // handle menu input
+    // Handle menu input
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
         gameManager.newGame();
-        gameUI.updateMessage("Press Space To Score");
+        gameUI.updateMessage("Press Space To Score!");
         gameUI.updateScore(gameManager.score);
     }
     
-    // handle player input
+    // Handle player input
     if (gameManager.acceptInput && !gameManager.paused)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -63,6 +62,7 @@ void GameEngine::input()
             gameManager.score++;
             gameUI.updateScore(gameManager.score);
             gameManager.acceptInput = false;
+            tree.chop();
         }
     }
 }
@@ -71,15 +71,16 @@ void GameEngine::update()
 {
     if (!gameManager.paused)
     {
-        // update timer
+        // Update timer
         float deltaTime = gameManager.calDeltaTime();
         gameManager.decTimer(deltaTime);
         gameUI.updateTimer(gameManager.timerVal);
+        Actor::updateActors(deltaTime);
         
-        // check if game over
+        // Check if game over
         if (gameManager.checkEnd())
         {
-            gameUI.updateMessage("Press Enter To Start");
+            gameUI.updateMessage("Press Enter To Start!");
             gameManager.paused = true;
         }
     }
@@ -88,6 +89,7 @@ void GameEngine::update()
 void GameEngine::draw()
 {
     window.clear();
+    Actor::drawActors(window);
     gameUI.drawUI(window);
     window.display();
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "GameUI.hpp"
 #include "GameManager.hpp"
+#include "Actor.hpp"
+#include "Tree.hpp"
 
 class GameEngine
 {
@@ -16,6 +17,12 @@ private:
     void draw();
     
     sf::RenderWindow window;
+    float windowWidth;
+    float windowHeight;
+
     GameUI gameUI;
     GameManager gameManager;
+
+    Actor background;
+    Tree tree;
 };

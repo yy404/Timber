@@ -1,22 +1,27 @@
  #include "GameUI.hpp"
 
+// Set resourcePath() as an empty string if not using Xcode
 #ifndef RESOURCE_PATH_HPP
 #define resourcePath() ""
 #endif
 
-GameUI::GameUI(): fontSizeDefault(75)
+GameUI::GameUI(float width, float height): fontSizeDefault(75)
 {
-    // create template text
+    // Create a template text
     font.loadFromFile(resourcePath() + std::string("fonts/KOMIKAP_.ttf"));
     sf::Text templateText;
     templateText.setFont(font); // must set font to show the text
     templateText.setCharacterSize(fontSizeDefault);
     templateText.setFillColor(sf::Color::White);
     
-    // create gameplay text
-    messageTextPtr = createTextByTemplate(templateText, sf::Vector2f(0,0), "Press Enter To Start");
-    timerTextPtr = createTextByTemplate(templateText, sf::Vector2f(0,100), "Timer:");
-    scoreTextPtr = createTextByTemplate(templateText, sf::Vector2f(0,200), "Score:");
+    // Create gameplay texts
+    messageTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, 0.5f * height), "Press Enter To Start");
+    timerTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, height - 100.0f), "Timer: 0.0");
+    scoreTextPtr = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score: 0");
+
+    // Set the orgin of some texts
+    setTextOrigin(messageTextPtr, 0.5f, 0.5f);
+    setTextOrigin(timerTextPtr, 0.5f, 0.5f);
 }
 
 GameUI::~GameUI()
@@ -44,6 +49,16 @@ sf::Text* GameUI::createTextByTemplate(sf::Text& templateText, sf::Vector2f posi
     newTextPtr->setString(initText);
     
     return newTextPtr;
+}
+
+void GameUI::setTextOrigin(sf::Text* textPtr, float xRatio, float yRatio)
+{
+    sf::FloatRect textRect = textPtr->getLocalBounds();
+
+    float xOrigin = textRect.left + (xRatio * textRect.width);
+    float yOrigin = textRect.top + (yRatio * textRect.height);
+
+    textPtr->setOrigin(xOrigin, yOrigin);
 }
 
 void GameUI::updateMessage(std::string msg)
