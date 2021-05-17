@@ -13,7 +13,7 @@ private:
     void updateStats();
 
     bool timeout();
-    void decTimer(float);
+    void decTimer(float deltaTime);
     float calDeltaTime();
 
     bool paused;
@@ -22,5 +22,5 @@ private:
 
     const float initTimerVal;
     float timerVal;
-    sf::Clock clock;    
+    sf::Clock clock;
 };

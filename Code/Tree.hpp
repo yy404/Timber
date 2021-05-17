@@ -8,15 +8,15 @@ enum class Side { LEFT, RIGHT, NONE }; // Indicate which side of the tree
 class Tree: public Actor
 {
 public:
-	Tree(float);
+	Tree(float windowWidth);
 	
 	void initialise();
-	void fillBranches(int);
+	void fillBranches(int seed);
 
-	void chop(Side, float);
+	void chop(Side sideOfTree, float logPositionY);
 	Side getBottomBranchSide();
 
-	virtual void update(float) override;
+	virtual void update(float deltaTime) override;
 
 private:
 	Actor log;

@@ -10,22 +10,22 @@
 class Actor
 {
 public:
-    Actor(std::string);
+    Actor(std::string spritePath);
     ~Actor();
-    Actor(const Actor&);
+    Actor(const Actor& other);
 
     const sf::Sprite& getSprite() const;
 
-    void setOrigin(float, float);
-    void setRotation(float);
-    void setPosition(float, float);
-    void setVelocity(float, float);
-    void setHidden(bool);
+    void setOrigin(float xRatio, float yRatio);
+    void setRotation(float degreeVal);
+    void setPosition(float x, float y);
+    void setVelocity(float x, float y);
+    void setHidden(bool ifSetHidden);
 
-    virtual void update(float);
+    virtual void update(float deltaTime);
 
-    static void updateActors(float);
-    static void drawActors(sf::RenderWindow&);
+    static void updateActors(float deltaTime);
+    static void drawActors(sf::RenderWindow& window);
 
 private:
     sf::Sprite sprite;

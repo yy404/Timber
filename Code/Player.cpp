@@ -5,8 +5,8 @@ Player::Player(float windowWidth) : Actor("graphics/player.png"),
     distanceToTree(310.0f), distanceToAxeX(120.0f), distanceToAxeY(110.0f),
     playerSide(Side::LEFT), axe("graphics/axe.png"), rip("graphics/rip.png")
 {
-    this->setOrigin(0.5f, 0.0f);
-    this->setPosition(centrePositionX - distanceToTree, playerPositionY);
+    setOrigin(0.5f, 0.0f);
+    setPosition(centrePositionX - distanceToTree, playerPositionY);
 
     axe.setOrigin(0.5f, 0.0f);
     axe.setHidden(true);
@@ -16,9 +16,9 @@ Player::Player(float windowWidth) : Actor("graphics/player.png"),
     rip.setHidden(true);
 }
 
-void Player::move(Side side)
+void Player::move(Side sideOfTree)
 {
-    playerSide = side;
+    playerSide = sideOfTree;
 }
 
 void Player::chop(Tree& tree)
@@ -27,30 +27,27 @@ void Player::chop(Tree& tree)
     axe.setHidden(false);
 }
 
-void Player::update(float)
+void Player::update(float deltaTime)
 {
+    // Not actually using deltaTime for now
+
     if (playerSide == Side::LEFT)
     {
-        this->setPosition(centrePositionX - distanceToTree, playerPositionY);
-        axe.setPosition(centrePositionX - distanceToTree + distanceToAxeX, playerPositionY + distanceToAxeY);
+        float playerPositionX = centrePositionX - distanceToTree;
+        setPosition(playerPositionX, playerPositionY);
+        axe.setPosition(playerPositionX + distanceToAxeX, playerPositionY + distanceToAxeY);
     }
     else // The right side
     {
-        this->setPosition(centrePositionX + distanceToTree, playerPositionY);
-        axe.setPosition(centrePositionX + distanceToTree - distanceToAxeX, playerPositionY + distanceToAxeY);
+        float playerPositionX = centrePositionX + distanceToTree;
+        setPosition(playerPositionX, playerPositionY);
+        axe.setPosition(playerPositionX - distanceToAxeX, playerPositionY + distanceToAxeY);
     }
 }
 
 bool Player::isSquished(Tree& tree)
 {
-    if (tree.getBottomBranchSide() == playerSide)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (tree.getBottomBranchSide() == playerSide);
 }
 
 void Player::hideAxe()
@@ -58,8 +55,8 @@ void Player::hideAxe()
     axe.setHidden(true);
 }
 
-void Player::displayRIP(bool inputBool)
+void Player::displayRIP(bool ifDisplayRIP)
 {
-    rip.setHidden(!inputBool);
-    this->setHidden(inputBool);
+    setHidden(ifDisplayRIP);
+    rip.setHidden(!ifDisplayRIP);
 }

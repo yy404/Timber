@@ -8,15 +8,15 @@ enum class Side; // Declare the side class defined in "Tree.hpp"
 class Player : public Actor
 {
 public:
-	Player(float);
-	void move(Side);
-	void chop(Tree&);
+	Player(float windowWidth);
+	void move(Side sideOfTree);
+	void chop(Tree& tree);
 
-	bool isSquished(Tree&);
+	bool isSquished(Tree& tree);
 	void hideAxe();
-	void displayRIP(bool);
+	void displayRIP(bool ifDisplayRIP);
 
-	virtual void update(float) override;
+	virtual void update(float deltaTime) override;
 
 private:
 

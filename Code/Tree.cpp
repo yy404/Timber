@@ -6,8 +6,8 @@ Tree::Tree(float windowWidth) : Actor("graphics/tree.png"),
 {
     treePositionX = 0.5f * windowWidth;
 
-    this->setOrigin(0.5f, 0.0f);
-    this->setPosition(treePositionX, 0.0f);
+    setOrigin(0.5f, 0.0f);
+    setPosition(treePositionX, 0.0f);
 
     log.setOrigin(0.5f, 0.0f);
     log.setHidden(true);
@@ -21,10 +21,10 @@ Tree::Tree(float windowWidth) : Actor("graphics/tree.png"),
     }
 }
 
-void Tree::chop(Side side, float logPositionY)
+void Tree::chop(Side sideOfTree, float logPositionY)
 {
     // The log velocity towards the x-axis positive direction if standing on the left side (vice versa)
-    int xDirection = (side == Side::LEFT) ? 1 : -1;
+    int xDirection = (sideOfTree == Side::LEFT) ? 1 : -1;
     // The log velocity always towards the negative direction of y-axis
     int yDirection = -1;
 
@@ -46,12 +46,10 @@ void Tree::update(float deltaTime)
         log.setVelocity(0.0f, 0.0f);
     }
 
-    // To handle if branchPositions.size() != NUM_BRANCHES
-
     // update the branch sprites
     for (int i = 0; i < NUM_BRANCHES; i++)
     {
-        float height = (NUM_BRANCHES-1-i) * BRANCH_DIST_Y;
+        float height = static_cast<float>(NUM_BRANCHES-1-i) * BRANCH_DIST_Y;
 
         if (branchPositions[i] == Side::LEFT)
         {
@@ -79,10 +77,8 @@ void Tree::update(float deltaTime)
 
 Side Tree::newBranchSide()
 {
-    // Spawn a new branch at position 0
-    // LEFT, RIGHT or NONE
+    // 20% LEFT, 20% RIGHT, 60% NONE
     int r = (rand() % 5);
-
     Side newSide;
     switch (r) {
     case 0:
@@ -102,6 +98,7 @@ void Tree::fillBranches(int seed)
 {
     srand((int)time(NULL) + seed);
 
+    // The bottom one is always NONE when filling an empty tree.
     if (branchPositions.empty())
     {
         branchPositions.push_back(Side::NONE);
@@ -117,6 +114,7 @@ void Tree::initialise()
 {
     branchPositions.clear();
     
+    // Using seed 0 for initialisation
     fillBranches(0);
 
     log.setHidden(true);

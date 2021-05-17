@@ -18,9 +18,9 @@ bool GameManager::timeout()
     return timerVal <= 0.0f;
 }
 
-void GameManager::decTimer(float delta)
+void GameManager::decTimer(float deltaTime)
 {
-    timerVal -= delta;
+    timerVal -= deltaTime;
     if (timerVal < 0.0f)
     {
         timerVal = 0.0f;
@@ -37,5 +37,6 @@ float GameManager::calDeltaTime()
 void GameManager::updateStats()
 {
     score++;
+    // Add bonus time by the given formula
     timerVal += (2.0f / score) + .15f;
 }

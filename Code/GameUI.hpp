@@ -11,21 +11,21 @@
 class GameUI
 {
 public:
-    GameUI(float, float);
+    GameUI(float width, float height);
     ~GameUI();
 
     GameUI(const GameUI&) = delete;
     GameUI(GameUI&&) = delete;
 
-    void drawUI(sf::RenderWindow&);
+    void drawUI(sf::RenderWindow& window);
     
-    void updateMessage(std::string);
-    void updateTimer(float);
-    void updateScore(int);
+    void updateMessage(std::string msg);
+    void updateTimer(float time);
+    void updateScore(int val);
     
 private:
-    sf::Text* createTextByTemplate(const sf::Text&, sf::Vector2f, std::string);
-    void setTextOrigin(sf::Text* const, float, float);
+    sf::Text* createTextByTemplate(const sf::Text& templateText, sf::Vector2f position, std::string initText);
+    void setTextOrigin(sf::Text* const textPtr, float xRatio, float yRatio);
 
     sf::Font font;
     const int fontSizeDefault;

@@ -16,10 +16,6 @@ Actor::Actor(std::string spritePath) : speedX(0.0f), speedY(0.0f), isHidden(fals
     {
         sprite.setTexture(texture);
     }
-    else
-    {
-        // To handle the failure of loading texture
-    }
 
     // Record the pointer of this actor
     Actor::actorPtrVector.push_back(this);
@@ -27,9 +23,14 @@ Actor::Actor(std::string spritePath) : speedX(0.0f), speedY(0.0f), isHidden(fals
 
 Actor::~Actor()
 {
-    //vector<Actor*>::iterator it;
-    //it = actorPtrVector.find(this);
-    //Actor::actorPtrVector.erase(it);
+    for (auto it = Actor::actorPtrVector.begin(); it != Actor::actorPtrVector.end(); it++)
+    {
+        if (*it == this)
+        {
+            Actor::actorPtrVector.erase(it);
+            break;
+        }
+    }
 }
 
 Actor::Actor(const Actor& other): 
@@ -47,8 +48,6 @@ const sf::Sprite& Actor::getSprite() const
 
 void Actor::setOrigin(float xRatio, float yRatio)
 {
-    // To handle invalid input values
-
     // Calculate the new orgin based on the input values
     sf::FloatRect textRect = sprite.getLocalBounds();
     float xOrigin = textRect.left + (xRatio * textRect.width);
@@ -73,9 +72,9 @@ void Actor::setVelocity(float x, float y)
     speedY = y;
 }
 
-void Actor::setHidden(bool inputBool)
+void Actor::setHidden(bool ifSetHidden)
 {
-    isHidden = inputBool;
+    isHidden = ifSetHidden;
 }
 
 void Actor::update(float deltaTime)
@@ -98,10 +97,6 @@ void Actor::updateActors(float deltaTime)
         {
             actorPtr->update(deltaTime);
         }
-        else
-        {
-            // To handle a null pointer
-        }
     }
 }
 
@@ -110,16 +105,9 @@ void Actor::drawActors(sf::RenderWindow& window)
     // Draw the sprite of all actors
     for (auto actorPtr : Actor::actorPtrVector)
     {
-        if (actorPtr != nullptr)
+        if (actorPtr != nullptr && !actorPtr->isHidden)
         {
-            if (!actorPtr->isHidden)
-            {
-                window.draw(actorPtr->getSprite());
-            }
-        }
-        else
-        {
-            // To handle a null pointer
+            window.draw(actorPtr->getSprite());
         }
     }
 }
