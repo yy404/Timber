@@ -11,11 +11,16 @@ class Actor
 {
 public:
     Actor(std::string);
+    ~Actor();
+    Actor(const Actor&);
 
-    const sf::Sprite& getSprite();
+    const sf::Sprite& getSprite() const;
+
     void setOrigin(float, float);
+    void setRotation(float);
     void setPosition(float, float);
     void setVelocity(float, float);
+    void setHidden(bool);
 
     virtual void update(float);
 
@@ -28,6 +33,8 @@ private:
 
     float speedX;
     float speedY;
+
+    bool isHidden;
 
     static std::vector<Actor*> actorPtrVector;
 };

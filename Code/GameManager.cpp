@@ -1,30 +1,29 @@
 #include "GameManager.hpp"
 
-GameManager::GameManager(): timerValMax(6.0f), paused(true), acceptInput(false), score(0), timerVal(timerValMax)
+GameManager::GameManager() : paused(true), acceptInput(false), score(0), initTimerVal(6.0f), timerVal(initTimerVal)
 {
 }
 
 void GameManager::newGame()
 {
-    timerVal = timerValMax;
     paused = false;
     acceptInput = true;
     score = 0;
+    timerVal = initTimerVal;
     clock.restart();
 }
 
-bool GameManager::checkEnd()
+bool GameManager::timeout()
 {
-    // End game if timer expires
-    return timerVal <= 0;
+    return timerVal <= 0.0f;
 }
 
 void GameManager::decTimer(float delta)
 {
     timerVal -= delta;
-    if (timerVal < 0)
+    if (timerVal < 0.0f)
     {
-        timerVal = 0;
+        timerVal = 0.0f;
     }
 }
 
@@ -33,4 +32,10 @@ float GameManager::calDeltaTime()
     // Get the delta time and reset the timer
     sf::Time dt = clock.restart();
     return dt.asSeconds();
+}
+
+void GameManager::updateStats()
+{
+    score++;
+    timerVal += (2.0f / score) + .15f;
 }

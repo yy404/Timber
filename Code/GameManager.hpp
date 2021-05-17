@@ -3,21 +3,24 @@
 
 class GameManager
 {
+friend class GameEngine;
+
 public:
     GameManager();
+
+private:
     void newGame();
-    bool checkEnd();
+    void updateStats();
+
+    bool timeout();
     void decTimer(float);
     float calDeltaTime();
-    
-private:
+
     bool paused;
     bool acceptInput;
     int score;
-    
-    const float timerValMax;
+
+    const float initTimerVal;
     float timerVal;
-    sf::Clock clock;
-    
-    friend class GameEngine;
+    sf::Clock clock;    
 };

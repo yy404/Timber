@@ -15,9 +15,9 @@ GameUI::GameUI(float width, float height): fontSizeDefault(75)
     templateText.setFillColor(sf::Color::White);
     
     // Create gameplay texts
-    messageTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, 0.5f * height), "Press Enter To Start");
+    messageTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, 0.5f * height), "Press Enter To Start!");
     timerTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, height - 100.0f), "Timer: 0.0");
-    scoreTextPtr = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score: 0");
+    scoreTextPtr = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score = 0");
 
     // Set the orgin of some texts
     setTextOrigin(messageTextPtr, 0.5f, 0.5f);
@@ -40,7 +40,7 @@ void GameUI::drawUI(sf::RenderWindow& window)
     }
 }
 
-sf::Text* GameUI::createTextByTemplate(sf::Text& templateText, sf::Vector2f position, std::string initText)
+sf::Text* GameUI::createTextByTemplate(const sf::Text& templateText, sf::Vector2f position, std::string initText)
 {
     sf::Text* newTextPtr = new sf::Text(templateText);
     textPtrVector.push_back(newTextPtr);
@@ -51,7 +51,7 @@ sf::Text* GameUI::createTextByTemplate(sf::Text& templateText, sf::Vector2f posi
     return newTextPtr;
 }
 
-void GameUI::setTextOrigin(sf::Text* textPtr, float xRatio, float yRatio)
+void GameUI::setTextOrigin(sf::Text* const textPtr, float xRatio, float yRatio)
 {
     sf::FloatRect textRect = textPtr->getLocalBounds();
 
@@ -64,6 +64,7 @@ void GameUI::setTextOrigin(sf::Text* textPtr, float xRatio, float yRatio)
 void GameUI::updateMessage(std::string msg)
 {
     messageTextPtr->setString(msg);
+    setTextOrigin(messageTextPtr, 0.5f, 0.5f);
 }
 
 void GameUI::updateTimer(float time)
@@ -75,7 +76,7 @@ void GameUI::updateTimer(float time)
 
 void GameUI::updateScore(int val)
 {
-    std::string temp = "Score: ";
+    std::string temp = "Score = ";
     temp += std::to_string(val);
     scoreTextPtr->setString(temp);
 }

@@ -1,9 +1,10 @@
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine(): 
+GameEngine::GameEngine() : 
     windowWidth(1920.0f), windowHeight(1080.0f), 
     gameUI(windowWidth, windowHeight), 
-    tree(windowWidth), background("graphics/background.png")
+    background("graphics/background.png"),
+    tree(windowWidth), player(windowWidth)
 {
     // Create a game window
     window.create(sf::VideoMode(windowWidth, windowHeight), "Game Window");
@@ -43,26 +44,45 @@ void GameEngine::input()
         if (event.type == sf::Event::KeyReleased)
         {
             gameManager.acceptInput = true;
+            player.hideAxe();
         }
     }
     
-    // Handle menu input
+    // Handle menu input: start a new game
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
         gameManager.newGame();
-        gameUI.updateMessage("Press Space To Score!");
+        
+        gameUI.updateMessage("");
         gameUI.updateScore(gameManager.score);
+
+        tree.initialise();
+        player.displayRIP(false);
     }
     
     // Handle player input
     if (gameManager.acceptInput && !gameManager.paused)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        bool isMoved = false;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         {
-            gameManager.score++;
+            player.move(Side::RIGHT);
+            isMoved = true;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            player.move(Side::LEFT);
+            isMoved = true;
+        }
+
+        if (isMoved)
+        {
+            player.chop(tree);
+            tree.fillBranches(gameManager.score);
+
+            gameManager.updateStats();
             gameUI.updateScore(gameManager.score);
             gameManager.acceptInput = false;
-            tree.chop();
         }
     }
 }
@@ -78,10 +98,17 @@ void GameEngine::update()
         Actor::updateActors(deltaTime);
         
         // Check if game over
-        if (gameManager.checkEnd())
+        if (gameManager.timeout())
         {
-            gameUI.updateMessage("Press Enter To Start!");
+            gameUI.updateMessage("Out of time!!");
             gameManager.paused = true;
+        }
+        else if (player.isSquished(tree))
+        {
+            gameUI.updateMessage("SQUISHED!!");
+            gameManager.paused = true;
+
+            player.displayRIP(true);
         }
     }
 }

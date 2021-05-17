@@ -4,6 +4,7 @@
 #include "GameManager.hpp"
 #include "Actor.hpp"
 #include "Tree.hpp"
+#include "Player.hpp"
 
 class GameEngine
 {
@@ -25,4 +26,5 @@ private:
 
     Actor background;
     Tree tree;
+    Player player;
 };
