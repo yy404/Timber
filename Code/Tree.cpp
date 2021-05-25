@@ -29,9 +29,9 @@ void Tree::chop(Side sideOfTree, float logPositionY)
     int yDirection = -1;
 
     // The log is flying from its initial position
-	log.setPosition(treePositionX, logPositionY);
+    log.setPosition(treePositionX, logPositionY);
     log.setHidden(false);
-	log.setVelocity(xDirection * logSpeedX, yDirection * logSpeedY);
+    log.setVelocity(xDirection * logSpeedX, yDirection * logSpeedY);
 
     branchPositions.pop_front();
 }
