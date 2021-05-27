@@ -3,10 +3,11 @@
 #include <deque>
 #include "Actor.hpp"
 
-enum class Side { LEFT, RIGHT, NONE }; // Indicate which side of the tree
-
 class Tree: public Actor
 {
+public:
+	enum class Side { LEFT, RIGHT, NONE }; // Indicate which side of the tree
+
 public:
 	Tree(float fWindowWidth);
 	

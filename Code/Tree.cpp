@@ -75,7 +75,7 @@ void Tree::update(float fTimeDelta)
     }
 }
 
-Side Tree::newBranchSide()
+Tree::Side Tree::newBranchSide()
 {
     // 20% LEFT, 20% RIGHT, 60% NONE
     int r = (rand() % 5);
@@ -121,7 +121,7 @@ void Tree::initialise()
     m_actorLog.setVelocity(0.0f, 0.0f);
 }
 
-Side Tree::getBottomBranchSide()
+Tree::Side Tree::getBottomBranchSide()
 {
     return m_dequeBranchSide.front();
 }

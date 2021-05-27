@@ -3,7 +3,7 @@
 Player::Player(float fWindowWidth) : Actor("graphics/player.png"),
     m_fCentrePositionX(0.5f * fWindowWidth), m_fPlayerPositionY(720.0f), m_fRipPositionY(860.0f),
     m_fTreeDistanceX(310.0f), m_fAxeDistanceX(120.0f), m_fAxeDistanceY(110.0f),
-    m_sidePlayer(Side::LEFT), m_actorAxe("graphics/axe.png"), m_actorRIP("graphics/rip.png")
+    m_sidePlayer(Tree::Side::LEFT), m_actorAxe("graphics/axe.png"), m_actorRIP("graphics/rip.png")
 {
     setOrigin(0.5f, 0.0f);
     setPosition(m_fCentrePositionX - m_fTreeDistanceX, m_fPlayerPositionY);
@@ -16,7 +16,7 @@ Player::Player(float fWindowWidth) : Actor("graphics/player.png"),
     m_actorRIP.setHidden(true);
 }
 
-void Player::move(Side sideOfTree)
+void Player::move(Tree::Side sideOfTree)
 {
     m_sidePlayer = sideOfTree;
 }
@@ -31,7 +31,7 @@ void Player::update(float fTimeDelta)
 {
     // Not actually using deltaTime for now
 
-    if (m_sidePlayer == Side::LEFT)
+    if (m_sidePlayer == Tree::Side::LEFT)
     {
         float fPositionX = m_fCentrePositionX - m_fTreeDistanceX;
         setPosition(fPositionX, m_fPlayerPositionY);

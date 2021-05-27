@@ -1,6 +1,6 @@
 #include "GameManager.hpp"
 
-GameManager::GameManager() : m_iScore(0), m_state(State::PAUSE), m_kfTimerInit(6.0f), m_fTimer(m_kfTimerInit)
+GameManager::GameManager() : m_iScore(0), m_state(GameState::PAUSE), m_kfTimerInit(6.0f), m_fTimer(m_kfTimerInit)
 {
 }
 
@@ -49,12 +49,12 @@ float GameManager::getTimerVal()
     return m_fTimer;
 }
 
-void GameManager::setState(State stateNew)
+void GameManager::setState(GameState stateNew)
 {
     m_state = stateNew;
 }
 
-State GameManager::getState()
+GameManager::GameState GameManager::getState()
 {
     return m_state;
 }

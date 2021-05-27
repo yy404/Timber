@@ -43,9 +43,9 @@ void GameEngine::input()
         // Key released: listen for key presses again
         if (event.type == sf::Event::KeyReleased)
         {
-            if (m_gameManager.getState() == State::WAIT)
+            if (m_gameManager.getState() == GameManager::GameState::WAIT)
             {
-                m_gameManager.setState(State::RUN);
+                m_gameManager.setState(GameManager::GameState::RUN);
             }
             m_actorPlayer.hideAxe();
         }
@@ -55,7 +55,7 @@ void GameEngine::input()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
         m_gameManager.initStats();
-        m_gameManager.setState(State::WAIT);
+        m_gameManager.setState(GameManager::GameState::WAIT);
         
         m_gameUI.updateMessage("");
         m_gameUI.updateScore(m_gameManager.getScore());
@@ -65,17 +65,17 @@ void GameEngine::input()
     }
     
     // Handle player input
-    if (m_gameManager.getState() == State::RUN)
+    if (m_gameManager.getState() == GameManager::GameState::RUN)
     {
         bool bPlayerAct = false;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         {
-            m_actorPlayer.move(Side::RIGHT);
+            m_actorPlayer.move(Tree::Side::RIGHT);
             bPlayerAct = true;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
-            m_actorPlayer.move(Side::LEFT);
+            m_actorPlayer.move(Tree::Side::LEFT);
             bPlayerAct = true;
         }
 
@@ -86,14 +86,14 @@ void GameEngine::input()
 
             m_gameManager.updateStats();
             m_gameUI.updateScore(m_gameManager.getScore());
-            m_gameManager.setState(State::WAIT);
+            m_gameManager.setState(GameManager::GameState::WAIT);
         }
     }
 }
 
 void GameEngine::update()
 {
-    if (m_gameManager.getState() != State::PAUSE)
+    if (m_gameManager.getState() != GameManager::GameState::PAUSE)
     {
         // Update timer
         float fTimeDelta = m_gameManager.calDeltaTime();
@@ -105,12 +105,12 @@ void GameEngine::update()
         if (m_gameManager.timeout())
         {
             m_gameUI.updateMessage("Out of time!!");
-            m_gameManager.setState(State::PAUSE);
+            m_gameManager.setState(GameManager::GameState::PAUSE);
         }
         else if (m_actorPlayer.isSquished(m_actorTree))
         {
             m_gameUI.updateMessage("SQUISHED!!");
-            m_gameManager.setState(State::PAUSE);
+            m_gameManager.setState(GameManager::GameState::PAUSE);
 
             m_actorPlayer.displayRIP(true);
         }

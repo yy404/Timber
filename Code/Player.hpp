@@ -1,15 +1,12 @@
 #pragma once
-
 #include "Actor.hpp"
 #include "Tree.hpp"
-
-enum class Side; // Declare the side class defined in "Tree.hpp"
 
 class Player : public Actor
 {
 public:
 	Player(float fWindowWidth);
-	void move(Side sideOfTree);
+	void move(Tree::Side sideOfTree);
 	void chop(Tree& tree);
 
 	bool isSquished(Tree& tree);
@@ -28,7 +25,7 @@ private:
 	float m_fAxeDistanceX;
 	float m_fAxeDistanceY;
 
-	Side m_sidePlayer;
+	Tree::Side m_sidePlayer;
 
 	Actor m_actorAxe;
 	Actor m_actorRIP;
