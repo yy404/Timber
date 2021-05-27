@@ -6,6 +6,8 @@
 #include "Tree.hpp"
 #include "Player.hpp"
 
+enum class State; // Declare the State class defined in "GameManager.hpp"
+
 class GameEngine
 {
 public:

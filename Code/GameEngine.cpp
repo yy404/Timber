@@ -43,7 +43,10 @@ void GameEngine::input()
         // Key released: listen for key presses again
         if (event.type == sf::Event::KeyReleased)
         {
-            gameManager.acceptInput = true;
+            if (gameManager.getGameState() == State::WAIT)
+            {
+                gameManager.setGameState(State::RUN);
+            }
             player.hideAxe();
         }
     }
@@ -54,14 +57,14 @@ void GameEngine::input()
         gameManager.newGame();
         
         gameUI.updateMessage("");
-        gameUI.updateScore(gameManager.score);
+        gameUI.updateScore(gameManager.getScore());
 
         tree.initialise();
         player.displayRIP(false);
     }
     
     // Handle player input
-    if (gameManager.acceptInput && !gameManager.paused)
+    if (gameManager.getGameState() == State::RUN)
     {
         bool isMoved = false;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -78,35 +81,35 @@ void GameEngine::input()
         if (isMoved)
         {
             player.chop(tree);
-            tree.fillBranches(gameManager.score);
+            tree.fillBranches(gameManager.getScore());
 
             gameManager.updateStats();
-            gameUI.updateScore(gameManager.score);
-            gameManager.acceptInput = false;
+            gameUI.updateScore(gameManager.getScore());
+            gameManager.setGameState(State::WAIT);
         }
     }
 }
 
 void GameEngine::update()
 {
-    if (!gameManager.paused)
+    if (gameManager.getGameState() != State::PAUSE)
     {
         // Update timer
         float deltaTime = gameManager.calDeltaTime();
         gameManager.decTimer(deltaTime);
-        gameUI.updateTimer(gameManager.timerVal);
+        gameUI.updateTimer(gameManager.getTimerVal());
         Actor::updateActors(deltaTime);
         
         // Check if game over
         if (gameManager.timeout())
         {
             gameUI.updateMessage("Out of time!!");
-            gameManager.paused = true;
+            gameManager.setGameState(State::PAUSE);
         }
         else if (player.isSquished(tree))
         {
             gameUI.updateMessage("SQUISHED!!");
-            gameManager.paused = true;
+            gameManager.setGameState(State::PAUSE);
 
             player.displayRIP(true);
         }

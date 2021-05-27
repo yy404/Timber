@@ -1,14 +1,13 @@
 #include "GameManager.hpp"
 
-GameManager::GameManager() : paused(true), acceptInput(false), score(0), initTimerVal(6.0f), timerVal(initTimerVal)
+GameManager::GameManager() : score(0), gameState(State::PAUSE), initTimerVal(6.0f), timerVal(initTimerVal)
 {
 }
 
 void GameManager::newGame()
 {
-    paused = false;
-    acceptInput = true;
     score = 0;
+    gameState = State::RUN;
     timerVal = initTimerVal;
     clock.restart();
 }
@@ -39,4 +38,24 @@ void GameManager::updateStats()
     score++;
     // Add bonus time by the given formula
     timerVal += (2.0f / score) + .15f;
+}
+
+int GameManager::getScore()
+{
+    return score;
+}
+
+float GameManager::getTimerVal()
+{
+    return timerVal;
+}
+
+void GameManager::setGameState(State currState)
+{
+    gameState = currState;
+}
+
+State GameManager::getGameState()
+{
+    return gameState;
 }

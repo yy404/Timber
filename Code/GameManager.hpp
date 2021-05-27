@@ -1,14 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+enum class State { PAUSE, RUN, WAIT }; // Indicate the current game state
+
 class GameManager
 {
-friend class GameEngine;
-
 public:
     GameManager();
 
-private:
     void newGame();
     void updateStats();
 
@@ -16,9 +15,15 @@ private:
     void decTimer(float deltaTime);
     float calDeltaTime();
 
-    bool paused;
-    bool acceptInput;
+    int getScore();
+    float getTimerVal();
+
+    void setGameState(State currState);
+    State getGameState();
+
+private:
     int score;
+    State gameState;
 
     const float initTimerVal;
     float timerVal;
