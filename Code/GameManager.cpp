@@ -4,12 +4,18 @@ GameManager::GameManager() : m_iScore(0), m_state(State::PAUSE), m_kfTimerInit(6
 {
 }
 
-void GameManager::newGame()
+void GameManager::initStats()
 {
     m_iScore = 0;
-    m_state = State::RUN;
     m_fTimer = m_kfTimerInit;
     m_clock.restart();
+}
+
+void GameManager::updateStats()
+{
+    m_iScore++;
+    // Add bonus time by the given formula
+    m_fTimer += (2.0f / m_iScore) + .15f;
 }
 
 bool GameManager::timeout()
@@ -31,13 +37,6 @@ float GameManager::calDeltaTime()
     // Get the delta time and reset the timer
     sf::Time dt = m_clock.restart();
     return dt.asSeconds();
-}
-
-void GameManager::updateStats()
-{
-    m_iScore++;
-    // Add bonus time by the given formula
-    m_fTimer += (2.0f / m_iScore) + .15f;
 }
 
 int GameManager::getScore()

@@ -8,7 +8,7 @@ class GameManager
 public:
     GameManager();
 
-    void newGame();
+    void initStats();
     void updateStats();
 
     bool timeout();

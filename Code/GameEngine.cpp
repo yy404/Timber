@@ -54,7 +54,8 @@ void GameEngine::input()
     // Handle menu input: start a new game
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
-        m_gameManager.newGame();
+        m_gameManager.initStats();
+        m_gameManager.setState(State::WAIT);
         
         m_gameUI.updateMessage("");
         m_gameUI.updateScore(m_gameManager.getScore());
