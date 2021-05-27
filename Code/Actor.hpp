@@ -11,7 +11,7 @@ class Actor
 {
 public:
     Actor(std::string spritePath);
-    ~Actor();
+    virtual ~Actor();
     Actor(const Actor& other);
 
     const sf::Sprite& getSprite() const;
