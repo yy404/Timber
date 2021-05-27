@@ -6,96 +6,96 @@
 #endif
 
 // Define a static vector to record all actors
-std::vector<Actor*> Actor::actorPtrVector;
+std::vector<Actor*> Actor::sVectorActorPtr;
 
-Actor::Actor(std::string spritePath) : speedX(0.0f), speedY(0.0f), isHidden(false)
+Actor::Actor(std::string strSpritePath) : m_fSpeedX(0.0f), m_fSpeedY(0.0f), m_bIsHidden(false)
 {
     // Set the sprite given the full path of a texture 
-    std::string fullPath = resourcePath() + spritePath;
-    if (texture.loadFromFile(fullPath))
+    std::string strFullPath = resourcePath() + strSpritePath;
+    if (m_texture.loadFromFile(strFullPath))
     {
-        sprite.setTexture(texture);
+        m_sprite.setTexture(m_texture);
     }
 
     // Record the pointer of this actor
-    Actor::actorPtrVector.push_back(this);
+    Actor::sVectorActorPtr.push_back(this);
 }
 
 Actor::~Actor()
 {
-    for (auto it = Actor::actorPtrVector.begin(); it != Actor::actorPtrVector.end(); it++)
+    for (auto it = Actor::sVectorActorPtr.begin(); it != Actor::sVectorActorPtr.end(); it++)
     {
         if (*it == this)
         {
-            Actor::actorPtrVector.erase(it);
+            Actor::sVectorActorPtr.erase(it);
             break;
         }
     }
 }
 
-Actor::Actor(const Actor& other): 
-    sprite(other.texture), texture(other.texture), 
-    speedX(other.speedX), speedY(other.speedY), isHidden(other.isHidden)
+Actor::Actor(const Actor& krActorOther): 
+    m_sprite(krActorOther.m_texture), m_texture(krActorOther.m_texture), 
+    m_fSpeedX(krActorOther.m_fSpeedX), m_fSpeedY(krActorOther.m_fSpeedY), m_bIsHidden(krActorOther.m_bIsHidden)
 {
     // Record the pointer of this actor
-    Actor::actorPtrVector.push_back(this);
+    Actor::sVectorActorPtr.push_back(this);
 }
 
 const sf::Sprite& Actor::getSprite() const
 {
-    return sprite;
+    return m_sprite;
 }
 
-void Actor::setOrigin(float xRatio, float yRatio)
+void Actor::setOrigin(float fRatioX, float fRatioY)
 {
     // Calculate the new orgin based on the input values
-    sf::FloatRect textRect = sprite.getLocalBounds();
-    float xOrigin = textRect.left + (xRatio * textRect.width);
-    float yOrigin = textRect.top + (yRatio * textRect.height);
+    sf::FloatRect textRect = m_sprite.getLocalBounds();
+    float xOrigin = textRect.left + (fRatioX * textRect.width);
+    float yOrigin = textRect.top + (fRatioY * textRect.height);
 
-    sprite.setOrigin(xOrigin, yOrigin);
+    m_sprite.setOrigin(xOrigin, yOrigin);
 }
 
-void Actor::setRotation(float degreeVal)
+void Actor::setRotation(float fValDegree)
 {
-    sprite.setRotation(degreeVal);
+    m_sprite.setRotation(fValDegree);
 }
 
-void Actor::setPosition(float x, float y)
+void Actor::setPosition(float fPositionX, float fPositionY)
 {
-    sprite.setPosition(x, y);
+    m_sprite.setPosition(fPositionX, fPositionY);
 }
 
-void Actor::setVelocity(float x, float y)
+void Actor::setVelocity(float fSpeedX, float fSpeedY)
 {
-    speedX = x;
-    speedY = y;
+    m_fSpeedX = fSpeedX;
+    m_fSpeedY = fSpeedY;
 }
 
-void Actor::setHidden(bool ifSetHidden)
+void Actor::setHidden(bool bIsHidden)
 {
-    isHidden = ifSetHidden;
+    m_bIsHidden = bIsHidden;
 }
 
-void Actor::update(float deltaTime)
+void Actor::update(float fTimeDelta)
 {
     // Update the position given current velocity and elapsed time
-    if (speedX != 0.0f || speedY != 0.0f)
+    if (m_fSpeedX != 0.0f || m_fSpeedY != 0.0f)
     {
-        float newPositionX = sprite.getPosition().x + (speedX * deltaTime);
-        float newPositionY = sprite.getPosition().y + (speedY * deltaTime);
-        sprite.setPosition(newPositionX, newPositionY);
+        float newPositionX = m_sprite.getPosition().x + (m_fSpeedX * fTimeDelta);
+        float newPositionY = m_sprite.getPosition().y + (m_fSpeedY * fTimeDelta);
+        m_sprite.setPosition(newPositionX, newPositionY);
     }
 }
 
-void Actor::updateActors(float deltaTime)
+void Actor::updateActors(float fTimeDelta)
 {
     // Update the position of all actors
-    for (auto actorPtr : Actor::actorPtrVector)
+    for (auto pActor : Actor::sVectorActorPtr)
     {
-        if (actorPtr != nullptr)
+        if (pActor != nullptr)
         {
-            actorPtr->update(deltaTime);
+            pActor->update(fTimeDelta);
         }
     }
 }
@@ -103,11 +103,11 @@ void Actor::updateActors(float deltaTime)
 void Actor::drawActors(sf::RenderWindow& window)
 {
     // Draw the sprite of all actors
-    for (auto actorPtr : Actor::actorPtrVector)
+    for (auto pActor : Actor::sVectorActorPtr)
     {
-        if (actorPtr != nullptr && !actorPtr->isHidden)
+        if (pActor != nullptr && !pActor->m_bIsHidden)
         {
-            window.draw(actorPtr->getSprite());
+            window.draw(pActor->getSprite());
         }
     }
 }

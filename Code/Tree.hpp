@@ -8,27 +8,27 @@ enum class Side { LEFT, RIGHT, NONE }; // Indicate which side of the tree
 class Tree: public Actor
 {
 public:
-	Tree(float windowWidth);
+	Tree(float fWindowWidth);
 	
 	void initialise();
-	void fillBranches(int seed);
+	void fillBranches(int iSeed);
 
-	void chop(Side sideOfTree, float logPositionY);
+	void chop(Side sideOfTree, float fLogPositionY);
 	Side getBottomBranchSide();
 
-	virtual void update(float deltaTime) override;
+	virtual void update(float fTimeDelta) override;
 
 private:
-	Actor log;
-	float treePositionX;
-	float logSpeedX;
-	float logSpeedY;
+	Actor m_actorLog;
+	float m_fPositionX;
+	float m_fLogSpeedX;
+	float m_fLogSpeedY;
 
-	std::vector<Actor> branches;
-	std::deque<Side> branchPositions;
-	const int NUM_BRANCHES;
-	const float BRANCH_DIST_X;
-	const float BRANCH_DIST_Y;
+	std::vector<Actor> m_vectorActorbranch;
+	std::deque<Side> m_dequeBranchSide;
+	const int m_kiBranchNum;
+	const float m_kfBranchDistanceX;
+	const float m_kfBranchDistanceY;
 
 	Side newBranchSide();
 };

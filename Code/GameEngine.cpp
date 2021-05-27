@@ -1,19 +1,19 @@
 #include "GameEngine.hpp"
 
 GameEngine::GameEngine() : 
-    windowWidth(1920.0f), windowHeight(1080.0f), 
-    gameUI(windowWidth, windowHeight), 
-    background("graphics/background.png"),
-    tree(windowWidth), player(windowWidth)
+    m_fWindowWidth(1920.0f), m_fWindowHeight(1080.0f),
+    m_gameUI(m_fWindowWidth, m_fWindowHeight),
+    m_actorBackground("graphics/background.png"),
+    m_actorTree(m_fWindowWidth), m_actorPlayer(m_fWindowWidth)
 {
     // Create a game window
-    window.create(sf::VideoMode(windowWidth, windowHeight), "Game Window");
+    m_window.create(sf::VideoMode(m_fWindowWidth, m_fWindowHeight), "Game Window");
 }
 
 void GameEngine::run()
 {
     // Start the game loop
-    while (window.isOpen())
+    while (m_window.isOpen())
     {
         input();
         update();
@@ -25,101 +25,101 @@ void GameEngine::input()
 {
     // Handle event input
     sf::Event event;
-    while (window.pollEvent(event)) // Must poll event to show the window
+    while (m_window.pollEvent(event)) // Must poll event to show the window
     {
         // Close window: exit
         if (event.type == sf::Event::Closed) {
-            window.close();
+            m_window.close();
         }
 
         // Escape pressed: exit
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape)
             {
-                window.close();
+                m_window.close();
             }
         }
         
         // Key released: listen for key presses again
         if (event.type == sf::Event::KeyReleased)
         {
-            if (gameManager.getGameState() == State::WAIT)
+            if (m_gameManager.getState() == State::WAIT)
             {
-                gameManager.setGameState(State::RUN);
+                m_gameManager.setState(State::RUN);
             }
-            player.hideAxe();
+            m_actorPlayer.hideAxe();
         }
     }
     
     // Handle menu input: start a new game
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
-        gameManager.newGame();
+        m_gameManager.newGame();
         
-        gameUI.updateMessage("");
-        gameUI.updateScore(gameManager.getScore());
+        m_gameUI.updateMessage("");
+        m_gameUI.updateScore(m_gameManager.getScore());
 
-        tree.initialise();
-        player.displayRIP(false);
+        m_actorTree.initialise();
+        m_actorPlayer.displayRIP(false);
     }
     
     // Handle player input
-    if (gameManager.getGameState() == State::RUN)
+    if (m_gameManager.getState() == State::RUN)
     {
-        bool isMoved = false;
+        bool bPlayerAct = false;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         {
-            player.move(Side::RIGHT);
-            isMoved = true;
+            m_actorPlayer.move(Side::RIGHT);
+            bPlayerAct = true;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
-            player.move(Side::LEFT);
-            isMoved = true;
+            m_actorPlayer.move(Side::LEFT);
+            bPlayerAct = true;
         }
 
-        if (isMoved)
+        if (bPlayerAct)
         {
-            player.chop(tree);
-            tree.fillBranches(gameManager.getScore());
+            m_actorPlayer.chop(m_actorTree);
+            m_actorTree.fillBranches(m_gameManager.getScore());
 
-            gameManager.updateStats();
-            gameUI.updateScore(gameManager.getScore());
-            gameManager.setGameState(State::WAIT);
+            m_gameManager.updateStats();
+            m_gameUI.updateScore(m_gameManager.getScore());
+            m_gameManager.setState(State::WAIT);
         }
     }
 }
 
 void GameEngine::update()
 {
-    if (gameManager.getGameState() != State::PAUSE)
+    if (m_gameManager.getState() != State::PAUSE)
     {
         // Update timer
-        float deltaTime = gameManager.calDeltaTime();
-        gameManager.decTimer(deltaTime);
-        gameUI.updateTimer(gameManager.getTimerVal());
-        Actor::updateActors(deltaTime);
+        float fTimeDelta = m_gameManager.calDeltaTime();
+        m_gameManager.decTimer(fTimeDelta);
+        m_gameUI.updateTimer(m_gameManager.getTimerVal());
+        Actor::updateActors(fTimeDelta);
         
         // Check if game over
-        if (gameManager.timeout())
+        if (m_gameManager.timeout())
         {
-            gameUI.updateMessage("Out of time!!");
-            gameManager.setGameState(State::PAUSE);
+            m_gameUI.updateMessage("Out of time!!");
+            m_gameManager.setState(State::PAUSE);
         }
-        else if (player.isSquished(tree))
+        else if (m_actorPlayer.isSquished(m_actorTree))
         {
-            gameUI.updateMessage("SQUISHED!!");
-            gameManager.setGameState(State::PAUSE);
+            m_gameUI.updateMessage("SQUISHED!!");
+            m_gameManager.setState(State::PAUSE);
 
-            player.displayRIP(true);
+            m_actorPlayer.displayRIP(true);
         }
     }
 }
 
 void GameEngine::draw()
 {
-    window.clear();
-    Actor::drawActors(window);
-    gameUI.drawUI(window);
-    window.display();
+    m_window.clear();
+    Actor::drawActors(m_window);
+    m_gameUI.drawUI(m_window);
+    m_window.display();
 }

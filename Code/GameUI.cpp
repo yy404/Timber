@@ -5,78 +5,78 @@
 #define resourcePath() ""
 #endif
 
-GameUI::GameUI(float width, float height): fontSizeDefault(75)
+GameUI::GameUI(float fWidth, float fHeight): m_kiFontSizeDefault(75)
 {
     // Create a template text
-    font.loadFromFile(resourcePath() + std::string("fonts/KOMIKAP_.ttf"));
+    m_font.loadFromFile(resourcePath() + std::string("fonts/KOMIKAP_.ttf"));
     sf::Text templateText;
-    templateText.setFont(font); // must set font to show the text
-    templateText.setCharacterSize(fontSizeDefault);
+    templateText.setFont(m_font); // must set font to show the text
+    templateText.setCharacterSize(m_kiFontSizeDefault);
     templateText.setFillColor(sf::Color::White);
     
     // Create gameplay texts
-    messageTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, 0.5f * height), "Press Enter To Start!");
-    timerTextPtr = createTextByTemplate(templateText, sf::Vector2f(0.5f * width, height - 100.0f), "Timer: 0.0");
-    scoreTextPtr = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score = 0");
+    m_pTextMessage = createTextByTemplate(templateText, sf::Vector2f(0.5f * fWidth, 0.5f * fHeight), "Press Enter To Start!");
+    m_pTextTimer = createTextByTemplate(templateText, sf::Vector2f(0.5f * fWidth, fHeight - 100.0f), "Timer: 0.0");
+    m_pTextScore = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score = 0");
 
     // Set the orgin of some texts
-    setTextOrigin(messageTextPtr, 0.5f, 0.5f);
-    setTextOrigin(timerTextPtr, 0.5f, 0.5f);
+    setTextOrigin(m_pTextMessage, 0.5f, 0.5f);
+    setTextOrigin(m_pTextTimer, 0.5f, 0.5f);
 }
 
 GameUI::~GameUI()
 {
-    for (auto textPtr: textPtrVector)
+    for (auto pText: m_vectorTextPtr)
     {
-        delete textPtr;
+        delete pText;
     }
 }
 
 void GameUI::drawUI(sf::RenderWindow& window)
 {
-    for (auto textPtr: textPtrVector)
+    for (auto pText : m_vectorTextPtr)
     {
-        window.draw(*textPtr);
+        window.draw(*pText);
     }
 }
 
-sf::Text* GameUI::createTextByTemplate(const sf::Text& templateText, sf::Vector2f position, std::string initText)
+sf::Text* GameUI::createTextByTemplate(const sf::Text& krTextTemplate, sf::Vector2f v2fPosition, std::string strTextInit)
 {
-    sf::Text* newTextPtr = new sf::Text(templateText);
-    textPtrVector.push_back(newTextPtr);
+    sf::Text* pText = new sf::Text(krTextTemplate);
+    m_vectorTextPtr.push_back(pText);
     
-    newTextPtr->setPosition(position);
-    newTextPtr->setString(initText);
+    pText->setPosition(v2fPosition);
+    pText->setString(strTextInit);
     
-    return newTextPtr;
+    return pText;
 }
 
-void GameUI::setTextOrigin(sf::Text* const textPtr, float xRatio, float yRatio)
+void GameUI::setTextOrigin(sf::Text* const kpText, float fRatioX, float fRatioY)
 {
-    sf::FloatRect textRect = textPtr->getLocalBounds();
+    sf::FloatRect textRect = kpText->getLocalBounds();
 
-    float xOrigin = textRect.left + (xRatio * textRect.width);
-    float yOrigin = textRect.top + (yRatio * textRect.height);
+    float fOriginX = textRect.left + (fRatioX * textRect.width);
+    float fOriginY = textRect.top + (fRatioY * textRect.height);
 
-    textPtr->setOrigin(xOrigin, yOrigin);
+    kpText->setOrigin(fOriginX, fOriginY);
 }
 
-void GameUI::updateMessage(std::string msg)
+void GameUI::updateMessage(std::string strMsg)
 {
-    messageTextPtr->setString(msg);
-    setTextOrigin(messageTextPtr, 0.5f, 0.5f);
+    m_pTextMessage->setString(strMsg);
+    setTextOrigin(m_pTextMessage, 0.5f, 0.5f);
 }
 
-void GameUI::updateTimer(float time)
+void GameUI::updateTimer(float fTime)
 {
-    std::string temp = "Timer: ";
-    temp += std::to_string(time).substr(0,3); // keep 3 chars
-    timerTextPtr->setString(temp);
+    std::string strTemp = "Timer: ";
+    strTemp += std::to_string(fTime).substr(0,3); // keep 3 chars
+    m_pTextTimer->setString(strTemp);
 }
 
-void GameUI::updateScore(int val)
+void GameUI::updateScore(int iScore)
 {
-    std::string temp = "Score = ";
-    temp += std::to_string(val);
-    scoreTextPtr->setString(temp);
+    std::string strTemp = "Score = ";
+    strTemp += std::to_string(iScore);
+    m_pTextScore->setString(strTemp);
 }

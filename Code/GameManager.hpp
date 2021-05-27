@@ -12,20 +12,20 @@ public:
     void updateStats();
 
     bool timeout();
-    void decTimer(float deltaTime);
+    void decTimer(float fTimeDelta);
     float calDeltaTime();
 
     int getScore();
     float getTimerVal();
 
-    void setGameState(State currState);
-    State getGameState();
+    void setState(State stateNew);
+    State getState();
 
 private:
-    int score;
-    State gameState;
+    int m_iScore;
+    State m_state;
 
-    const float initTimerVal;
-    float timerVal;
-    sf::Clock clock;
+    const float m_kfTimerInit; 
+    float m_fTimer;
+    sf::Clock m_clock;
 };

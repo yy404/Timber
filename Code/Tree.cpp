@@ -1,76 +1,76 @@
 #include "Tree.hpp"
 
-Tree::Tree(float windowWidth) : Actor("graphics/tree.png"), 
-    log("graphics/log.png"), logSpeedX(5000.0f), logSpeedY(1500.0f),
-    NUM_BRANCHES(6), BRANCH_DIST_X(360.0f), BRANCH_DIST_Y(150.0f)
+Tree::Tree(float fWindowWidth) : Actor("graphics/tree.png"),
+    m_actorLog("graphics/log.png"), m_fLogSpeedX(5000.0f), m_fLogSpeedY(1500.0f),
+    m_kiBranchNum(6), m_kfBranchDistanceX(360.0f), m_kfBranchDistanceY(150.0f)
 {
-    treePositionX = 0.5f * windowWidth;
+    m_fPositionX = 0.5f * fWindowWidth;
 
     setOrigin(0.5f, 0.0f);
-    setPosition(treePositionX, 0.0f);
+    setPosition(m_fPositionX, 0.0f);
 
-    log.setOrigin(0.5f, 0.0f);
-    log.setHidden(true);
+    m_actorLog.setOrigin(0.5f, 0.0f);
+    m_actorLog.setHidden(true);
 
-    branches.reserve(NUM_BRANCHES);
-    for (int i = 0; i < NUM_BRANCHES; i++)
+    m_vectorActorbranch.reserve(m_kiBranchNum);
+    for (int i = 0; i < m_kiBranchNum; i++)
     {
-        branches.emplace_back("graphics/branch.png");
-        branches[i].setOrigin(0.5f, 0.5f);
-        branches[i].setHidden(true);
+        m_vectorActorbranch.emplace_back("graphics/branch.png");
+        m_vectorActorbranch[i].setOrigin(0.5f, 0.5f);
+        m_vectorActorbranch[i].setHidden(true);
     }
 }
 
-void Tree::chop(Side sideOfTree, float logPositionY)
+void Tree::chop(Side sideOfTree, float fLogPositionY)
 {
     // The log velocity towards the x-axis positive direction if standing on the left side (vice versa)
-    int xDirection = (sideOfTree == Side::LEFT) ? 1 : -1;
+    int iDirectionX = (sideOfTree == Side::LEFT) ? 1 : -1;
     // The log velocity always towards the negative direction of y-axis
-    int yDirection = -1;
+    int iDirectionY = -1;
 
     // The log is flying from its initial position
-    log.setPosition(treePositionX, logPositionY);
-    log.setHidden(false);
-    log.setVelocity(xDirection * logSpeedX, yDirection * logSpeedY);
+    m_actorLog.setPosition(m_fPositionX, fLogPositionY);
+    m_actorLog.setHidden(false);
+    m_actorLog.setVelocity(iDirectionX * m_fLogSpeedX, iDirectionY * m_fLogSpeedY);
 
-    branchPositions.pop_front();
+    m_dequeBranchSide.pop_front();
 }
 
-void Tree::update(float deltaTime)
+void Tree::update(float fTimeDelta)
 {
     // Deactivate the log if it's out of the screen
-    if (log.getSprite().getPosition().x < 0.0f * treePositionX ||
-        log.getSprite().getPosition().x > 2.0f * treePositionX)
+    if (m_actorLog.getSprite().getPosition().x < 0.0f * m_fPositionX ||
+        m_actorLog.getSprite().getPosition().x > 2.0f * m_fPositionX)
     {
-        log.setHidden(true);
-        log.setVelocity(0.0f, 0.0f);
+        m_actorLog.setHidden(true);
+        m_actorLog.setVelocity(0.0f, 0.0f);
     }
 
     // update the branch sprites
-    for (int i = 0; i < NUM_BRANCHES; i++)
+    for (int i = 0; i < m_kiBranchNum; i++)
     {
-        float height = static_cast<float>(NUM_BRANCHES-1-i) * BRANCH_DIST_Y;
+        float fHeight = static_cast<float>(m_kiBranchNum-1-i) * m_kfBranchDistanceY;
 
-        if (branchPositions[i] == Side::LEFT)
+        if (m_dequeBranchSide[i] == Side::LEFT)
         {
             // Move the sprite to the left side
-            branches[i].setPosition(treePositionX - BRANCH_DIST_X, height);
+            m_vectorActorbranch[i].setPosition(m_fPositionX - m_kfBranchDistanceX, fHeight);
             // Flip the sprite round the other way
-            branches[i].setRotation(180);
-            branches[i].setHidden(false);
+            m_vectorActorbranch[i].setRotation(180);
+            m_vectorActorbranch[i].setHidden(false);
         }
-        else if (branchPositions[i] == Side::RIGHT)
+        else if (m_dequeBranchSide[i] == Side::RIGHT)
         {
             // Move the sprite to the right side
-            branches[i].setPosition(treePositionX + BRANCH_DIST_X, height);
+            m_vectorActorbranch[i].setPosition(m_fPositionX + m_kfBranchDistanceX, fHeight);
             // Set the sprite rotation to normal
-            branches[i].setRotation(0);
-            branches[i].setHidden(false);
+            m_vectorActorbranch[i].setRotation(0);
+            m_vectorActorbranch[i].setHidden(false);
         }
         else
         {
             // Hide the branch
-            branches[i].setHidden(true);
+            m_vectorActorbranch[i].setHidden(true);
         }
     }
 }
@@ -79,49 +79,49 @@ Side Tree::newBranchSide()
 {
     // 20% LEFT, 20% RIGHT, 60% NONE
     int r = (rand() % 5);
-    Side newSide;
+    Side sideNew;
     switch (r) {
     case 0:
-        newSide = Side::LEFT;
+        sideNew = Side::LEFT;
         break;
     case 1:
-        newSide = Side::RIGHT;
+        sideNew = Side::RIGHT;
         break;
     default:
-        newSide = Side::NONE;
+        sideNew = Side::NONE;
         break;
     }
-    return newSide;
+    return sideNew;
 }
 
-void Tree::fillBranches(int seed)
+void Tree::fillBranches(int iSeed)
 {
-    srand((int)time(NULL) + seed);
+    srand((int)time(NULL) + iSeed);
 
     // The bottom one is always NONE when filling an empty tree.
-    if (branchPositions.empty())
+    if (m_dequeBranchSide.empty())
     {
-        branchPositions.push_back(Side::NONE);
+        m_dequeBranchSide.push_back(Side::NONE);
     }
 
-    while (branchPositions.size() < NUM_BRANCHES)
+    while (m_dequeBranchSide.size() < m_kiBranchNum)
     {
-        branchPositions.push_back(newBranchSide());
+        m_dequeBranchSide.push_back(newBranchSide());
     }
 }
 
 void Tree::initialise()
 {
-    branchPositions.clear();
+    m_dequeBranchSide.clear();
     
     // Using seed 0 for initialisation
     fillBranches(0);
 
-    log.setHidden(true);
-    log.setVelocity(0.0f, 0.0f);
+    m_actorLog.setHidden(true);
+    m_actorLog.setVelocity(0.0f, 0.0f);
 }
 
 Side Tree::getBottomBranchSide()
 {
-    return branchPositions.front();
+    return m_dequeBranchSide.front();
 }

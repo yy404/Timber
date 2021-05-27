@@ -11,7 +11,7 @@
 class GameUI
 {
 public:
-    GameUI(float width, float height);
+    GameUI(float fWidth, float fHeight);
     ~GameUI();
 
     GameUI(const GameUI&) = delete;
@@ -19,19 +19,19 @@ public:
 
     void drawUI(sf::RenderWindow& window);
     
-    void updateMessage(std::string msg);
-    void updateTimer(float time);
-    void updateScore(int val);
+    void updateMessage(std::string strMsg);
+    void updateTimer(float fTime);
+    void updateScore(int iScore);
     
 private:
-    sf::Text* createTextByTemplate(const sf::Text& templateText, sf::Vector2f position, std::string initText);
-    void setTextOrigin(sf::Text* const textPtr, float xRatio, float yRatio);
+    sf::Text* createTextByTemplate(const sf::Text& krTextTemplate, sf::Vector2f v2fPosition, std::string strTextInit);
+    void setTextOrigin(sf::Text* const kpText, float fRatioX, float fRatioY);
 
-    sf::Font font;
-    const int fontSizeDefault;
+    sf::Font m_font;
+    const int m_kiFontSizeDefault;
 
-    std::vector<sf::Text*> textPtrVector;
-    sf::Text* messageTextPtr;
-    sf::Text* timerTextPtr;
-    sf::Text* scoreTextPtr;
+    std::vector<sf::Text*> m_vectorTextPtr;
+    sf::Text* m_pTextMessage;
+    sf::Text* m_pTextTimer;
+    sf::Text* m_pTextScore;
 };

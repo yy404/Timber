@@ -19,14 +19,14 @@ private:
     void update();
     void draw();
     
-    sf::RenderWindow window;
-    float windowWidth;
-    float windowHeight;
+    sf::RenderWindow m_window;
+    float m_fWindowWidth;
+    float m_fWindowHeight;
 
-    GameUI gameUI;
-    GameManager gameManager;
+    GameUI m_gameUI;
+    GameManager m_gameManager;
 
-    Actor background;
-    Tree tree;
-    Player player;
+    Actor m_actorBackground;
+    Tree m_actorTree;
+    Player m_actorPlayer;
 };
