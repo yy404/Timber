@@ -19,7 +19,7 @@ GameUI::GameUI(float fWidth, float fHeight): m_kiFontSizeDefault(75)
     m_pTextTimer = createTextByTemplate(templateText, sf::Vector2f(0.5f * fWidth, fHeight - 100.0f), "Timer: 0.0");
     m_pTextScore = createTextByTemplate(templateText, sf::Vector2f(20.0f,20.0f), "Score = 0");
 
-    // Set the orgin of some texts
+    // Set the origin of some texts
     setTextOrigin(m_pTextMessage, 0.5f, 0.5f);
     setTextOrigin(m_pTextTimer, 0.5f, 0.5f);
 }
